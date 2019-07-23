@@ -1,10 +1,10 @@
-package project.shen.mvp.impl
+package project.shen.wowhub.mvp.impl
 
 import android.app.Activity
 import android.content.res.Configuration
 import android.os.Bundle
-import project.shen.mvp.IMvpView
-import project.shen.mvp.IPresenter
+import project.shen.wowhub.mvp.IMvpView
+import project.shen.wowhub.mvp.IPresenter
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import kotlin.reflect.KClass

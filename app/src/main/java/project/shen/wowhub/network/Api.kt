@@ -17,3 +17,4 @@ interface Api {
 }
 
 object AuthService: Api by retrofit.create(Api::class.java)
+
