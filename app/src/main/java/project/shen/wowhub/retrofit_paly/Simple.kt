@@ -39,7 +39,7 @@ object RetrofitHelper {
 suspend fun main() {
     val github = RetrofitHelper.retrofit.create(GithubInterface::class.java)
     RetrofitHelper.setHost(FALSE_API_HOST)
-    val call = github.contributors("square", "retrofit", Date())
+    val call = github.contributors(owner = "square", repo = "retrofit", now = Date())
     val result = call.await()
     result.forEach {
         println("${it.login} (${it.contributions})")
