@@ -1,15 +1,17 @@
 package project.shen.wowhub.retrofit_paly
 
-import android.util.Log
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import project.shen.wowhub.retrofit_paly.RetrofitHelper.FALSE_API_HOST
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Method
 import java.util.*
+import kotlin.reflect.full.declaredFunctions
+import kotlin.reflect.full.declaredMemberFunctions
 
 object RetrofitHelper {
 
@@ -26,7 +28,7 @@ object RetrofitHelper {
                 .addInterceptor(HttpLoggingInterceptor(::print).setLevel(HttpLoggingInterceptor.Level.BODY))
                 .build())
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .addCallAdapterFactory(DeferredCallAdapter.create())
             .addConverterFactory(DateConverter.Companion.DateConverterFactory)
             .build()
     }
@@ -38,8 +40,7 @@ object RetrofitHelper {
 
 suspend fun main() {
     val github = RetrofitHelper.retrofit.create(GithubInterface::class.java)
-    RetrofitHelper.setHost(FALSE_API_HOST)
-    val call = github.contributors(owner = "square", repo = "retrofit", now = Date())
+    val call = github.contributors("square", "retrofit", Date())
     val result = call.await()
     result.forEach {
         println("${it.login} (${it.contributions})")
